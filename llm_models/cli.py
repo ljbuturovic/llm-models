@@ -17,24 +17,10 @@ parser.add_argument("-p", "--provider",
 parser.add_argument("-r", "--region",
                     help="""Google Cloud region (e.g., 'us-central1').
 *Required* if provider is VertexAI. Ignored for other providers.""")
-args = parser.parse_args()
 
-# Validate region requirement for VertexAI
-if args.provider == "VertexAI":
-    if not args.region:
-        parser.error("--region is required when provider is VertexAI")
+# Global args variable, set by main()
+args = None
 
-    # Validate region format (e.g., us-central1, europe-west4, asia-northeast1)
-    import re
-    if not re.match(r'^[a-z]+-[a-z]+\d+$', args.region):
-        print(f"Error: Invalid region format '{args.region}'")
-        print("Expected format: <continent>-<location><number> (e.g., 'us-central1', 'europe-west4')")
-        print("\nCommon Vertex AI regions:")
-        print("  us-central1, us-east4, us-west1")
-        print("  europe-west1, europe-west4")
-        print("  asia-northeast1, asia-southeast1")
-        print("\nSee: https://cloud.google.com/vertex-ai/docs/general/locations")
-        sys.exit(1)
 
 def list_openai_models():
     """List available OpenAI models"""
@@ -234,14 +220,39 @@ def list_xai_models():
         print("\nNote: Check https://docs.x.ai/docs for the latest model information.")
 
 
-# Main execution
-if args.provider == "OpenAI":
-    list_openai_models()
-elif args.provider == "GoogleAI":
-    list_googleai_models()
-elif args.provider == "VertexAI":
-    list_vertexai_models()
-elif args.provider == "Anthropic":
-    list_anthropic_models()
-elif args.provider == "xAI":
-    list_xai_models()
+def main():
+    """Entry point for the CLI."""
+    global args
+    args = parser.parse_args()
+
+    # Validate region requirement for VertexAI
+    if args.provider == "VertexAI":
+        if not args.region:
+            parser.error("--region is required when provider is VertexAI")
+
+        # Validate region format (e.g., us-central1, europe-west4, asia-northeast1)
+        import re
+        if not re.match(r'^[a-z]+-[a-z]+\d+$', args.region):
+            print(f"Error: Invalid region format '{args.region}'")
+            print("Expected format: <continent>-<location><number> (e.g., 'us-central1', 'europe-west4')")
+            print("\nCommon Vertex AI regions:")
+            print("  us-central1, us-east4, us-west1")
+            print("  europe-west1, europe-west4")
+            print("  asia-northeast1, asia-southeast1")
+            print("\nSee: https://cloud.google.com/vertex-ai/docs/general/locations")
+            sys.exit(1)
+
+    if args.provider == "OpenAI":
+        list_openai_models()
+    elif args.provider == "GoogleAI":
+        list_googleai_models()
+    elif args.provider == "VertexAI":
+        list_vertexai_models()
+    elif args.provider == "Anthropic":
+        list_anthropic_models()
+    elif args.provider == "xAI":
+        list_xai_models()
+
+
+if __name__ == "__main__":
+    main()
