@@ -9,12 +9,12 @@ A simple command-line tool to list available LLM models from various providers (
 
 ### Linux (recommended):
 ```bash
-pipx install llm-models
+$ pipx install llm-models
 ```
 
 ### macOS/Windows, or Linux using venv:
 ```bash
-pip install llm-models
+$ pip install llm-models
 ```
 
 ## Usage
