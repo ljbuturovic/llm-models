@@ -7,8 +7,14 @@ A simple command-line tool to list available LLM models from various providers (
 
 ## Installation
 
+### Linux (recommended):
 ```bash
-$ pip install llm_models
+pipx install llm-models
+```
+
+### macOS/Windows, or Linux using venv:
+```bash
+pip install llm-models
 ```
 
 ## Usage
