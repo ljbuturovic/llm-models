@@ -69,6 +69,7 @@ Model: models/gemini-2.5-pro-preview-03-25
 Model: models/gemini-2.5-flash
 Model: models/gemini-2.5-pro-preview-05-06
 Model: models/gemini-2.5-pro-preview-06-05
+...
 ```
 
 List Google models using Vertex AI API (with regional endpoint):
@@ -81,6 +82,7 @@ Model: publishers/google/models/occupancy-analytics
 Model: publishers/google/models/multimodalembedding
 Model: publishers/google/models/pt-test
 Model: publishers/google/models/imageclassification-vit
+...
 
 ```
 
