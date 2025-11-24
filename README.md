@@ -12,6 +12,23 @@ $ pip install llm_models
 ```
 
 ## Usage
+```bash
+$ llm-models -h
+usage: llm-models [-h] -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI} [-r REGION]
+
+List available LLM models from various providers
+
+options:
+  -h, --help            show this help message and exit
+  -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI}, --provider {OpenAI,Anthropic,xAI,GoogleAI,VertexAI}
+                        The LLM provider backend.
+                        - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
+                        - 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
+  -r REGION, --region REGION
+                        Google Cloud region (e.g., 'us-central1').
+                        *Required* if provider is VertexAI. Ignored for other providers.
+```
+
 
 The tool requires API keys set as environment variables:
 - `OPENAI_API_KEY` for OpenAI
@@ -38,7 +55,7 @@ Model: gpt-3.5-turbo
 
 List Google models using Gemini API:
 ```bash
-$ llm-models --provider GoogleAI
+$ llm-models -p GoogleAI
 Listing available Google AI Studio models (auto-routed region)...
 ================================================================================
 Model: models/embedding-gecko-001
@@ -50,12 +67,20 @@ Model: models/gemini-2.5-pro-preview-06-05
 
 List Google models using Vertex AI API (with regional endpoint):
 ```bash
-$ llm-models --provider VertexAI --region us-central1
+$ llm-models -p VertexAI -r us-central1
+Listing available Vertex AI models (project: ZZZ, region: us-central1)...
+================================================================================
+Model: publishers/google/models/imageclassification-efficientnet
+Model: publishers/google/models/occupancy-analytics
+Model: publishers/google/models/multimodalembedding
+Model: publishers/google/models/pt-test
+Model: publishers/google/models/imageclassification-vit
+
 ```
 
 List Anthropic models:
 ```bash
-$ llm-models --provider Anthropic
+$ llm-models -p Anthropic
 Listing available Anthropic models...
 ================================================================================
 Model: claude-haiku-4-5-20251001 (Claude Haiku 4.5)
@@ -71,7 +96,7 @@ Model: claude-3-opus-20240229 (Claude Opus 3)
 
 List xAI models:
 ```bash
-$ llm-models --provider xAI
+$ llm-models -p xAI
 Listing available xAI models (NOTE: xAI uses aliases, so grok-4 is an acceptable API name, resolving to grok-4-0709 as of Nov. 2025)...
 ================================================================================
 Model: grok-2-1212
