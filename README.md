@@ -7,21 +7,8 @@ A simple command-line tool to list available LLM models from various providers (
 
 ## Installation
 
-1. Clone the repository:
 ```bash
-$ git clone git@github.com:ljbuturovic/llm_models.git
-$ cd llm_models
-```
-
-2. Create a virtual environment:
-```bash
-$ python3 -m venv venv
-$ source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-$ pip install -r requirements.txt
+$ pip install llm_models
 ```
 
 ## Usage
@@ -36,7 +23,7 @@ The tool requires API keys set as environment variables:
 
 List OpenAI models:
 ```bash
-$ ./llm_models.py --provider OpenAI
+$ llm-models --provider OpenAI
 Listing available OpenAI models...
 ================================================================================
 Model: babbage-002
@@ -51,7 +38,7 @@ Model: gpt-3.5-turbo
 
 List Google models using Gemini API:
 ```bash
-$ ./llm_models.py --provider GoogleAI
+$ llm-models --provider GoogleAI
 Listing available Google AI Studio models (auto-routed region)...
 ================================================================================
 Model: models/embedding-gecko-001
@@ -63,12 +50,12 @@ Model: models/gemini-2.5-pro-preview-06-05
 
 List Google models using Vertex AI API (with regional endpoint):
 ```bash
-$ ./llm_models.py --provider VertexAI --region us-central1
+$ llm-models --provider VertexAI --region us-central1
 ```
 
 List Anthropic models:
 ```bash
-$ ./llm_models.py --provider Anthropic
+$ llm-models --provider Anthropic
 Listing available Anthropic models...
 ================================================================================
 Model: claude-haiku-4-5-20251001 (Claude Haiku 4.5)
@@ -84,7 +71,7 @@ Model: claude-3-opus-20240229 (Claude Opus 3)
 
 List xAI models:
 ```bash
-$ ./llm_models.py --provider xAI
+$ llm-models --provider xAI
 Listing available xAI models (NOTE: xAI uses aliases, so grok-4 is an acceptable API name, resolving to grok-4-0709 as of Nov. 2025)...
 ================================================================================
 Model: grok-2-1212
@@ -104,5 +91,4 @@ Model: grok-2-image-1212
 ## Requirements
 
 - Python 3.7+
-- See `requirements.txt` for package dependencies
 - tested on Ubuntu 24.04
