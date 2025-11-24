@@ -22,9 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "openai",
-    "anthropic",
-    "google-generativeai",
-    "google-cloud-aiplatform",
+    "google-genai"
 ]
 
 [project.urls]
