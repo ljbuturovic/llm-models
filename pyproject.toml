@@ -32,4 +32,4 @@ Homepage = "https://github.com/ljbuturovic/llm-models"
 Repository = "https://github.com/ljbuturovic/llm-models"
 
 [project.scripts]
-llm-models = "llm-models.cli:main"
+llm-models = "llm_models.cli:main"
