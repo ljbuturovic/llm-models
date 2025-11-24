@@ -38,7 +38,7 @@ options:
 
 The tool requires API keys set as environment variables:
 - `OPENAI_API_KEY` for OpenAI
-- `GOOGLE_API_KEY` for Google Gemini API, or `GOOGLE_CLOUD_PROJECT` for Vertex AI API
+- `GOOGLE_API_KEY` for GoogleAI API, or `GOOGLE_CLOUD_PROJECT` for VertexAI API
 - `ANTHROPIC_API_KEY` for Anthropic
 - `XAI_API_KEY` for xAI
 
@@ -59,7 +59,7 @@ Model: gpt-3.5-turbo
 ...
 ```
 
-List Google models using Gemini API:
+List Google models using GoogleAI API:
 ```bash
 $ llm-models -p GoogleAI
 Listing available Google AI Studio models (auto-routed region)...
