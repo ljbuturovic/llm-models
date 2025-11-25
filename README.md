@@ -7,7 +7,7 @@ A simple command-line tool to list available LLM models from various providers (
 
 ## Installation
 
-### Linux (recommended):
+### Linux:
 ```bash
 $ pipx install llm-models
 ```
