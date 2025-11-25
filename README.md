@@ -12,7 +12,13 @@ A simple command-line tool to list available LLM models from various providers (
 $ pipx install llm-models
 ```
 
-### macOS/Windows, or Linux using venv:
+### macOS:
+```bash
+% brew tap ljbuturovic/tap
+% brew install llm-models
+```
+
+### Windows, or Linux using venv:
 ```bash
 pip install llm-models
 ```
