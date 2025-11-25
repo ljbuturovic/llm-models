@@ -1,4 +1,4 @@
-# llm_models
+# llm-models
 
 ![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
@@ -44,7 +44,7 @@ options:
 
 The tool requires API keys set as environment variables:
 - `OPENAI_API_KEY` for OpenAI
-- `GOOGLE_API_KEY` for Google Gemini API, or `GOOGLE_CLOUD_PROJECT` for Vertex AI API
+- `GOOGLE_API_KEY` for GoogleAI API, or `GOOGLE_CLOUD_PROJECT` for VertexAI API
 - `ANTHROPIC_API_KEY` for Anthropic
 - `XAI_API_KEY` for xAI
 
@@ -65,7 +65,7 @@ Model: gpt-3.5-turbo
 ...
 ```
 
-List Google models using Gemini API:
+List Google models using GoogleAI API:
 ```bash
 $ llm-models -p GoogleAI
 Listing available Google AI Studio models (auto-routed region)...
@@ -75,6 +75,7 @@ Model: models/gemini-2.5-pro-preview-03-25
 Model: models/gemini-2.5-flash
 Model: models/gemini-2.5-pro-preview-05-06
 Model: models/gemini-2.5-pro-preview-06-05
+...
 ```
 
 List Google models using Vertex AI API (with regional endpoint):
@@ -87,6 +88,7 @@ Model: publishers/google/models/occupancy-analytics
 Model: publishers/google/models/multimodalembedding
 Model: publishers/google/models/pt-test
 Model: publishers/google/models/imageclassification-vit
+...
 
 ```
 
