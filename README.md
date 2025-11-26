@@ -113,5 +113,5 @@ Model: grok-3
 
 ## Requirements
 
-- Python 3.7+
-- tested on Ubuntu 24.04
+- Python 3.9+
+- tested on Ubuntu 24.04 and macOS 26.1
