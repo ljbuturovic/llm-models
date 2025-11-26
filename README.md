@@ -14,10 +14,14 @@ $ pipx install llm-models
 ```
 
 ### macOS
-
 ```bash
-% brew tap ljbuturovic/tap
-% brew install llm-models
+pip3 install llm-models
+```
+
+*If you get "command not found", add to PATH (replace 3.X with your Python version):*
+```bash
+echo 'export PATH="$HOME/Library/Python/3.X/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
 ```
 
 ### Windows
@@ -60,10 +64,6 @@ Listing available OpenAI models...
 Model: babbage-002
 Model: chatgpt-4o-latest
 Model: codex-mini-latest
-Model: dall-e-2
-Model: dall-e-3
-Model: davinci-002
-Model: gpt-3.5-turbo
 ...
 ```
 
@@ -75,8 +75,6 @@ Listing available Google AI Studio models (auto-routed region)...
 Model: models/embedding-gecko-001
 Model: models/gemini-2.5-pro-preview-03-25
 Model: models/gemini-2.5-flash
-Model: models/gemini-2.5-pro-preview-05-06
-Model: models/gemini-2.5-pro-preview-06-05
 ...
 ```
 
@@ -88,8 +86,6 @@ Listing available Vertex AI models (project: ZZZ, region: us-central1)...
 Model: publishers/google/models/imageclassification-efficientnet
 Model: publishers/google/models/occupancy-analytics
 Model: publishers/google/models/multimodalembedding
-Model: publishers/google/models/pt-test
-Model: publishers/google/models/imageclassification-vit
 ...
 
 ```
@@ -101,13 +97,7 @@ Listing available Anthropic models...
 ================================================================================
 Model: claude-haiku-4-5-20251001 (Claude Haiku 4.5)
 Model: claude-sonnet-4-5-20250929 (Claude Sonnet 4.5)
-Model: claude-opus-4-1-20250805 (Claude Opus 4.1)
-Model: claude-opus-4-20250514 (Claude Opus 4)
-Model: claude-sonnet-4-20250514 (Claude Sonnet 4)
-Model: claude-3-7-sonnet-20250219 (Claude Sonnet 3.7)
-Model: claude-3-5-haiku-20241022 (Claude Haiku 3.5)
-Model: claude-3-haiku-20240307 (Claude Haiku 3)
-Model: claude-3-opus-20240229 (Claude Opus 3)
+...
 ```
 
 List xAI models:
@@ -118,15 +108,7 @@ Listing available xAI models (NOTE: xAI uses aliases, so grok-4 is an acceptable
 Model: grok-2-1212
 Model: grok-2-vision-1212
 Model: grok-3
-Model: grok-3-mini
-Model: grok-4-0709
-Model: grok-4-1-fast-non-reasoning
-Model: grok-4-1-fast-reasoning
-Model: grok-4-fast-non-reasoning
-Model: grok-4-fast-reasoning
-Model: grok-code-fast-1
-Model: grok-2-image-1212
-
+...
 ```
 
 ## Requirements
