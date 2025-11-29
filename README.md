@@ -1,6 +1,6 @@
 # llm-models
 
-![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI).
