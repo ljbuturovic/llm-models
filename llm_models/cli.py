@@ -4,9 +4,15 @@
 import argparse
 import os
 import sys
+from importlib.metadata import version as _pkg_version
+
+try:
+    __version__ = _pkg_version("llm-models")
+except Exception:
+    __version__ = "unknown"
 
 parser = argparse.ArgumentParser(
-    description="List available LLM models from various providers",
+    description=f"List available LLM models from various providers (v{__version__})",
     formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-p", "--provider",
                     required=True,
@@ -15,6 +21,7 @@ parser.add_argument("-p", "--provider",
 - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
 - 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
 - 'Baseten': Baseten deployed models (BASETEN_API_KEY).""")
+parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
 parser.add_argument("-r", "--region",
                     help="""Google Cloud region (e.g., 'us-central1').
 *Required* if provider is VertexAI. Ignored for other providers.""")
