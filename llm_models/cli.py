@@ -10,10 +10,11 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-p", "--provider",
                     required=True,
-                    choices=["OpenAI", "Anthropic", "xAI", "GoogleAI", "VertexAI"],
+                    choices=["OpenAI", "Anthropic", "xAI", "GoogleAI", "VertexAI", "Baseten"],
                     help="""The LLM provider backend.
 - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
-- 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.""")
+- 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
+- 'Baseten': Baseten deployed models (BASETEN_API_KEY).""")
 parser.add_argument("-r", "--region",
                     help="""Google Cloud region (e.g., 'us-central1').
 *Required* if provider is VertexAI. Ignored for other providers.""")
@@ -187,6 +188,42 @@ def list_anthropic_models():
         sys.exit(1)
 
 
+def list_baseten_models():
+    """List Baseten hosted models"""
+    import json
+    import urllib.request
+
+    api_key = os.getenv("BASETEN_API_KEY")
+    if not api_key:
+        print("Error: BASETEN_API_KEY not set")
+        sys.exit(1)
+
+    print("Listing available Baseten models...")
+    print("=" * 80)
+
+    try:
+        req = urllib.request.Request(
+            "https://inference.baseten.co/v1/models",
+            headers={"Authorization": f"Bearer {api_key}"}
+        )
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+
+        for model in data.get("data", []):
+            model_id = model.get("id", "unknown")
+            name = model.get("name", "")
+            context = model.get("context_length")
+            parts = [f"Model: {model_id}"]
+            if name:
+                parts.append(f"({name})")
+            if context:
+                parts.append(f"context: {context:,}")
+            print(" ".join(parts))
+    except Exception as e:
+        print(f"Error listing models: {e}")
+        sys.exit(1)
+
+
 def list_xai_models():
     """List available xAI models"""
     try:
@@ -252,6 +289,8 @@ def main():
         list_anthropic_models()
     elif args.provider == "xAI":
         list_xai_models()
+    elif args.provider == "Baseten":
+        list_baseten_models()
 
 
 if __name__ == "__main__":
