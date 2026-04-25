@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI).
+A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI, Baseten).
 
 ## Installation
 
@@ -109,6 +109,22 @@ Model: grok-2-1212
 Model: grok-2-vision-1212
 Model: grok-3
 ...
+```
+
+List Baseten models:
+```bash
+$ llm-models -p Baseten
+Listing available Baseten models...
+================================================================================
+Model: openai/gpt-oss-120b (OpenAI GPT 120B) context: 128,072
+Model: deepseek-ai/DeepSeek-V3.1 (DeepSeek V3.1) context: 163,840
+Model: zai-org/GLM-4.7 (GLM 4.7) context: 200,000
+Model: moonshotai/Kimi-K2.5 (Kimi K2.5) context: 262,000
+Model: MiniMaxAI/MiniMax-M2.5 (Minimax M2.5) context: 204,000
+Model: zai-org/GLM-5 (GLM 5) context: 202,800
+Model: nvidia/Nemotron-120B-A12B (Nemotron Super) context: 202,800
+Model: moonshotai/Kimi-K2.6 (Kimi K2.6) context: 262,000
+
 ```
 
 ## Requirements
