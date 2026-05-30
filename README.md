@@ -38,7 +38,7 @@ List available LLM models from various providers
 
 options:
   -h, --help            show this help message and exit
-  -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI}, --provider {OpenAI,Anthropic,xAI,GoogleAI,VertexAI}
+  -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}, --provider {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}
                         The LLM provider backend.
                         - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
                         - 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
