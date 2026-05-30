@@ -1,30 +1,19 @@
 # llm-models
 
-![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI, Baseten).
 
 ## Installation
 
-### Linux
+### Linux/macOS
 
 ```bash
 $ pipx install llm-models
 ```
 
-### macOS
-```bash
-pip3 install llm-models
-```
-
-*If you get "command not found", add to PATH (replace 3.X with your Python version):*
-```bash
-echo 'export PATH="$HOME/Library/Python/3.X/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-### Windows
+### Windows (untested)
 ```bash
 pip install llm-models
 ```
@@ -129,5 +118,5 @@ Model: moonshotai/Kimi-K2.6 (Kimi K2.6) context: 262,000
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.10+
 - tested on Ubuntu 24.04 and macOS 26.1
