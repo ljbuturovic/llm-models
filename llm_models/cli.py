@@ -25,6 +25,10 @@ parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__v
 parser.add_argument("-r", "--region",
                     help="""Google Cloud region (e.g., 'us-central1').
 *Required* if provider is VertexAI. Ignored for other providers.""")
+parser.add_argument("-c", "--check", action="store_true",
+                    help="""Probe each model with a minimal 1-token request to report
+live availability instead of just listing the catalog.
+Anthropic only; consumes a tiny amount of credits per model.""")
 
 # Global args variable, set by main()
 args = None
@@ -159,6 +163,65 @@ def _try_known_gemini_models(client):
                 print(f"? {model_name} - Error: {error_msg[:100]}")
 
 
+class _OutOfCredits(Exception):
+    """Raised when the Anthropic account has insufficient credit balance."""
+
+
+def _probe_anthropic_model(api_key, model_id):
+    """Send a minimal 1-token request to check a model's live availability.
+
+    Returns a (symbol, label) tuple for display. Raises _OutOfCredits if the
+    account is out of credits, since every subsequent probe would fail too.
+    """
+    import json
+    import urllib.error
+    import urllib.request
+
+    payload = json.dumps({
+        "model": model_id,
+        "max_tokens": 1,
+        "messages": [{"role": "user", "content": "hi"}],
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        headers={
+            "x-api-key": api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req) as response:
+            response.read()
+        return ("✓", "available")
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        try:
+            err = json.loads(body).get("error", {})
+            etype = err.get("type", "")
+            emsg = err.get("message", "")
+        except Exception:
+            etype, emsg = "", body[:200]
+
+        if "credit balance" in emsg.lower() or etype == "billing_error":
+            raise _OutOfCredits(emsg or "credit balance too low")
+        if e.code == 529 or etype == "overloaded_error":
+            return ("✗", "unavailable (overloaded)")
+        if e.code == 404 or etype == "not_found_error":
+            return ("✗", "not found for this key")
+        if e.code == 401:
+            return ("✗", "unauthorized (check API key)")
+        if e.code == 429:
+            return ("⚠", "rate-limited")
+        detail = emsg[:60] if emsg else etype or "unknown error"
+        return ("⚠", f"error {e.code}: {detail}")
+    except urllib.error.URLError as e:
+        return ("⚠", f"network error: {e.reason}")
+
+
 def list_anthropic_models():
     """List available Anthropic models"""
     import json
@@ -169,7 +232,11 @@ def list_anthropic_models():
         print("Error: ANTHROPIC_API_KEY not set")
         sys.exit(1)
 
-    print("Listing available Anthropic models...")
+    checking = getattr(args, "check", False)
+    if checking:
+        print("Checking live availability of Anthropic models...")
+    else:
+        print("Listing available Anthropic models...")
     print("=" * 80)
 
     try:
@@ -182,16 +249,29 @@ def list_anthropic_models():
         )
         with urllib.request.urlopen(req) as response:
             data = json.loads(response.read().decode())
-
-        for model in data.get("data", []):
-            model_id = model.get("id", "unknown")
-            display_name = model.get("display_name", "")
-            if display_name:
-                print(f"Model: {model_id} ({display_name})")
-            else:
-                print(f"Model: {model_id}")
     except Exception as e:
         print(f"Error listing models: {e}")
+        sys.exit(1)
+
+    models = data.get("data", [])
+    try:
+        for model in models:
+            model_id = model.get("id", "unknown")
+            display_name = model.get("display_name", "")
+            label = f"{model_id} ({display_name})" if display_name else model_id
+            if checking:
+                symbol, status = _probe_anthropic_model(api_key, model_id)
+                print(f"{symbol} {label} - {status}")
+            else:
+                print(f"Model: {label}")
+    except _OutOfCredits as e:
+        print()
+        print("=" * 80)
+        print("Out of credits: your Anthropic account's credit balance is too low to")
+        print("run availability checks. Listing still works (it doesn't cost credits);")
+        print("re-run without --check, or top up at https://console.anthropic.com/settings/billing")
+        if str(e):
+            print(f"\nAPI message: {e}")
         sys.exit(1)
 
 

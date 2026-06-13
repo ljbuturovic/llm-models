@@ -21,7 +21,8 @@ pip install llm-models
 ## Usage
 ```bash
 $ llm-models -h
-usage: llm-models [-h] -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI} [-r REGION]
+usage: llm-models [-h] -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}
+                  [-r REGION] [-c]
 
 List available LLM models from various providers
 
@@ -34,6 +35,9 @@ options:
   -r REGION, --region REGION
                         Google Cloud region (e.g., 'us-central1').
                         *Required* if provider is VertexAI. Ignored for other providers.
+  -c, --check           Probe each model with a minimal 1-token request to report
+                        live availability instead of just listing the catalog.
+                        Anthropic only; consumes a tiny amount of credits per model.
 ```
 
 
@@ -88,6 +92,47 @@ Model: claude-haiku-4-5-20251001 (Claude Haiku 4.5)
 Model: claude-sonnet-4-5-20250929 (Claude Sonnet 4.5)
 ...
 ```
+
+#### Listing vs. checking (`--check`)
+
+A plain listing reads Anthropic's **model catalog** (`/v1/models`): the set of
+model IDs your API key is *entitled to address*. It is free and instant, but it
+is **not** a health check — a model can appear in the catalog while not actually
+being served to your key (still rolling out, gated by tier, or mid-incident).
+
+`--check` answers the other question — *can I get a completion from it right
+now?* — by sending each model a minimal 1-token request and reporting the live
+result:
+
+```bash
+$ llm-models -p Anthropic --check
+Checking live availability of Anthropic models...
+================================================================================
+✗ claude-fable-5 (Claude Fable 5) - not found for this key
+✓ claude-opus-4-8 (Claude Opus 4.8) - available
+✓ claude-sonnet-4-6 (Claude Sonnet 4.6) - available
+✓ claude-haiku-4-5-20251001 (Claude Haiku 4.5) - available
+...
+```
+
+Status meanings:
+
+| Symbol | Meaning |
+| ------ | ------- |
+| `✓ available` | Served right now (HTTP 200). |
+| `✗ unavailable (overloaded)` | Real model, temporarily over capacity (HTTP 529) — retry later. |
+| `✗ not found for this key` | In the catalog but not serveable to your key (HTTP 404): not yet rolled out, or gated by tier/region. |
+| `✗ unauthorized` | API key rejected (HTTP 401). |
+| `⚠ rate-limited` | Throttled (HTTP 429) — couldn't determine availability. |
+
+The two views fail for different reasons and have different fixes: a `404` is a
+configuration/entitlement problem (retrying won't help), while a `529` is
+transient (retrying will). The catalog tells you *whether it's worth trying*;
+`--check` tells you *whether trying works right now*.
+
+> **Note:** `--check` spends a tiny amount of credits per model. If your account
+> is out of credits, it prints a friendly message and exits instead of dumping a
+> stack trace — plain listing still works, since it costs nothing.
 
 List xAI models:
 ```bash
