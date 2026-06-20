@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI, Baseten).
+A simple command-line tool to list available LLM models from various providers (OpenAI, Google, Anthropic, xAI, Baseten, OpenRouter).
 
 ## Installation
 
@@ -21,14 +21,14 @@ pip install llm-models
 ## Usage
 ```bash
 $ llm-models -h
-usage: llm-models [-h] -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}
+usage: llm-models [-h] -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten,OpenRouter}
                   [-r REGION] [-c]
 
 List available LLM models from various providers
 
 options:
   -h, --help            show this help message and exit
-  -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}, --provider {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten}
+  -p {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten,OpenRouter}, --provider {OpenAI,Anthropic,xAI,GoogleAI,VertexAI,Baseten,OpenRouter}
                         The LLM provider backend.
                         - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
                         - 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
@@ -46,6 +46,8 @@ The tool requires API keys set as environment variables:
 - `GOOGLE_API_KEY` for GoogleAI API, or `GOOGLE_CLOUD_PROJECT` for VertexAI API
 - `ANTHROPIC_API_KEY` for Anthropic
 - `XAI_API_KEY` for xAI
+- `BASETEN_API_KEY` for Baseten
+- `OPENROUTER_API_KEY` for OpenRouter (optional — listing is public)
 
 ### Examples
 
@@ -160,6 +162,18 @@ Model: nvidia/Nemotron-120B-A12B (Nemotron Super) context: 202,800
 Model: moonshotai/Kimi-K2.6 (Kimi K2.6) context: 262,000
 
 ```
+
+List OpenRouter models (sorted by id, with context window and input price; `OPENROUTER_API_KEY` is optional since the listing endpoint is public):
+```bash
+$ llm-models -p OpenRouter
+Listing available OpenRouter models...
+================================================================================
+Model: ai21/jamba-large-1.7 (AI21: Jamba Large 1.7) context: 256,000 $0.000002/in-tok
+Model: aion-labs/aion-1.0 (AionLabs: Aion-1.0) context: 131,072 $0.000004/in-tok
+Model: allenai/olmo-3-32b-think (AllenAI: Olmo 3 32B Think) context: 65,536 $0.00000015/in-tok
+...
+```
+> **Note:** OpenRouter lists 300+ models, so expect long output.
 
 ## Requirements
 

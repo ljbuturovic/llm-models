@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-p", "--provider",
                     required=True,
-                    choices=["OpenAI", "Anthropic", "xAI", "GoogleAI", "VertexAI", "Baseten"],
+                    choices=["OpenAI", "Anthropic", "xAI", "GoogleAI", "VertexAI", "Baseten", "OpenRouter"],
                     help="""The LLM provider backend.
 - 'GoogleAI': Google AI Studio (API Key). Global/Auto-routed.
 - 'VertexAI': Google Cloud Vertex AI (IAM Auth). Region-specific.
@@ -311,6 +311,47 @@ def list_baseten_models():
         sys.exit(1)
 
 
+def list_openrouter_models():
+    """List models available via OpenRouter"""
+    import json
+    import urllib.request
+
+    # The models endpoint is public; a key is optional and only used if present.
+    api_key = os.getenv("OPENROUTER_API_KEY")
+
+    print("Listing available OpenRouter models...")
+    print("=" * 80)
+
+    headers = {}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+
+    try:
+        req = urllib.request.Request(
+            "https://openrouter.ai/api/v1/models",
+            headers=headers
+        )
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+
+        for model in sorted(data.get("data", []), key=lambda m: m.get("id", "")):
+            model_id = model.get("id", "unknown")
+            name = model.get("name", "")
+            context = model.get("context_length")
+            price = (model.get("pricing") or {}).get("prompt")
+            parts = [f"Model: {model_id}"]
+            if name:
+                parts.append(f"({name})")
+            if context:
+                parts.append(f"context: {context:,}")
+            if price:
+                parts.append(f"${price}/in-tok")
+            print(" ".join(parts))
+    except Exception as e:
+        print(f"Error listing models: {e}")
+        sys.exit(1)
+
+
 def list_xai_models():
     """List available xAI models"""
     try:
@@ -378,6 +419,8 @@ def main():
         list_xai_models()
     elif args.provider == "Baseten":
         list_baseten_models()
+    elif args.provider == "OpenRouter":
+        list_openrouter_models()
 
 
 if __name__ == "__main__":
